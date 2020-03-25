@@ -96,7 +96,7 @@ int main() {
     vector<Node*> *filhos = new vector<Node*>;
 
     cout<<endl<<"============================================================================"<<endl;
-    cout<<"Digite o valor da chave (se quiser nao quiser mais inserir digite -9999): "<<endl;
+    cout<<"Digite o valor da chave (se nao quiser mais inserir digite -9999): "<<endl;
     cin>>N;
     //--------------
     if(N==-9999)
@@ -108,15 +108,24 @@ int main() {
     cin>>F;
     
     cout<<"Agora digite os valores das chaves dos nos: ";
-    while(F--){
-        int no = 0;
-        cin>>no;
-        Node *x = new Node(no,NULL);
-        filhos->push_back(x);
+    Node *pai;
+    if(F==0){
+      pai = new Node(N, NULL);
+    }
+    else{
+      while(F--){
+          int no = 0;
+          cin>>no;
+          Node *x = new Node(no,NULL);
+          if(x->filhos == NULL)
+            cout<<"null"<<endl;
+          filhos->push_back(x);
+      }
+      pai = new Node(N, filhos);
     }
     cout<<endl<<"============================================================================"<<endl;
 
-    Node *pai = new Node(N, filhos);
+    
       
     if(P == "raiz"){
         root = pai;
