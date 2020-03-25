@@ -107,12 +107,12 @@ int main() {
     cout<<"Digite a quantidade de filhos do no "<<N<<": "<<endl;
     cin>>F;
     
-    cout<<"Agora digite os valores das chaves dos nos: ";
     Node *pai;
     if(F==0){
       pai = new Node(N, NULL);
     }
     else{
+      cout<<"Agora digite os valores das chaves dos nos: ";
       while(F--){
           int no = 0;
           cin>>no;
