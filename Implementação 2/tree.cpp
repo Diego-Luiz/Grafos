@@ -117,8 +117,6 @@ int main() {
           int no = 0;
           cin>>no;
           Node *x = new Node(no,NULL);
-          if(x->filhos == NULL)
-            cout<<"null"<<endl;
           filhos->push_back(x);
       }
       pai = new Node(N, filhos);
