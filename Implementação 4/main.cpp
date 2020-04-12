@@ -12,21 +12,21 @@ class caracter_num {
 	public :
 		char c;
 		int freq;
-		bool no;
-		caracter_num(char c='c', int freq=0, bool no=false){
+		int ordem;
+		caracter_num(char c='c', int freq=0, int ordem=0){
 			this->c = c;
 			this->freq = freq;
-			this->no = no;
+			this->ordem = ordem;
 		}
-		void setNo(){
-			no = true;
+		void setOrdem(int ordem){
+			this->ordem = ordem;
 		}
 };
 
 vector <caracter_num> lista;
 
 void insere(char caracter, int num){
-	caracter_num novo(caracter, num);
+	caracter_num novo(caracter, num, lista.size());
 	
 	if(lista.size() == 0){
 		lista.push_back(novo);
@@ -34,7 +34,7 @@ void insere(char caracter, int num){
 	}
 	for(vector<caracter_num>:: iterator it=lista.begin(); it!=lista.end(); it++){
 		if(num < it->freq){
-			lista.insert(lista.begin(), novo);
+			lista.insert(it, novo);
 			return;
 		}
 	}
@@ -84,20 +84,20 @@ multimap <int, No*> pseudo_arvore;
 
 void gerar_nos(){
 	
-	while(lista.size() > 0){
-		cout<<"tam da lista: "<<lista.size()<<endl;
+	while(lista.size() > 1){
 		vector<caracter_num>:: iterator it = lista.begin();
 		int aux = 0;
 		if(it->c != '|'){
-			aux = it->freq;
+			
+			it++;
+			if(it->c != '|'){
+				it--;
+				aux = it->freq;
 			No *esquerdo = new No(it->c, it->freq, NULL, NULL);
 				
 			lista.erase(it);
 			
 			it = lista.begin();
-			
-			if(it->c != '|'){
-				
 				No *direito = new No(it->c, it->freq, NULL, NULL);
 				aux += it->freq;
 				No *Pai = new No('|', aux, esquerdo, direito);
@@ -108,11 +108,9 @@ void gerar_nos(){
 				
 				insere('|', aux);
 				
-			}
-		}
-		
-		else{
-			char c_anterior;
+			}else{
+				it--;
+				char c_anterior;
 			int freq_anterior;
 			if(it->c != '|'){//se o 1 nao for no
 				aux = it->freq;
@@ -139,11 +137,16 @@ void gerar_nos(){
 					lista.erase(it);
 					
 					insere('|', aux);
-						
+					
 					pseudo_arvore.insert(pair<int, No*>(aux, Pai));
 					
 				}
-			}else{
+			}
+			}
+		}
+		
+		else{
+			
 				if(it->c == '|'){//se o 1 for um no
 					No *esquerdo;
 					No *direito;
@@ -179,7 +182,7 @@ void gerar_nos(){
 					
 					pseudo_arvore.insert(pair<int, No*>(aux, Pai));
 				}
-			}
+			
 		}
 			
 	}
@@ -260,10 +263,9 @@ int main(){
 	
 	multimap<int, No*>:: iterator it = pseudo_arvore.begin();
 	
-	cout<<"size da arvore: "<<pseudo_arvore.size()<<endl;
 	
 	for(it; it!= pseudo_arvore.end(); it++){
-		cout<<it->first<<endl;
+		cout<<it->first<<" : esquerda: "<<it->second->FE->chave.freq<<" : direita: "<<it->second->FD->chave.freq<<endl;
 	}
 	
 	
