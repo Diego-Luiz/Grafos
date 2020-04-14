@@ -90,43 +90,43 @@ void gerar_nos(){
 				
 				insere('|', aux);
 				
-			}else{
+			}
+			else{
 				it--;
 				char c_anterior;
-			int freq_anterior;
-			if(it->c != '|'){//se o 1 nao for no
-				aux = it->freq;
-				c_anterior = it->c;
-				freq_anterior = it->freq;
-				
-				lista.erase(it);
-				
-				it = lista.begin();
-				
-				aux += it->freq;
-				if(it->c == '|'){//se o 2 for um no
-					
-					No *Pai;
-					
-					No *esquerda = new No(c_anterior, freq_anterior, NULL, NULL); 
-					
-					multimap<int, No*>::iterator mult_it = pseudo_arvore.find(it->freq);
-					
-					if(mult_it != pseudo_arvore.end()){//nao pode ter duas somas iguais
-						Pai = new No('|', aux, esquerda, mult_it->second);
-					}
+				int freq_anterior;
+				if(it->c != '|'){//se o 1 nao for no
+					aux = it->freq;
+					c_anterior = it->c;
+					freq_anterior = it->freq;
 					
 					lista.erase(it);
 					
-					insere('|', aux);
+					it = lista.begin();
 					
-					pseudo_arvore.insert(pair<int, No*>(aux, Pai));
-					
+					aux += it->freq;
+					if(it->c == '|'){//se o 2 for um no
+						
+						No *Pai;
+						
+						No *esquerda = new No(c_anterior, freq_anterior, NULL, NULL); 
+						
+						multimap<int, No*>::iterator mult_it = pseudo_arvore.find(it->freq);
+						
+						if(mult_it != pseudo_arvore.end()){//nao pode ter duas somas iguais
+							Pai = new No('|', aux, esquerda, mult_it->second);
+						}
+						
+						lista.erase(it);
+						
+						insere('|', aux);
+						
+						pseudo_arvore.insert(pair<int, No*>(aux, Pai));
+						
+					}
 				}
 			}
 		}
-	}
-		
 		else{
 			
 				if(it->c == '|'){//se o 1 for um no
