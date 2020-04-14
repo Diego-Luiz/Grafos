@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <map>
-#include<string.h>
-#include<vector>
+#include <string.h>
+#include <vector>
 
 using namespace std;
 
@@ -53,7 +53,6 @@ class No {
 		No(char c, int num, No *FE=NULL, No *FD=NULL){
 			chave.c = c;
 			chave.freq = num;
-			
 			this->FE = FE;
 			this->FD = FD;
 		}
@@ -63,24 +62,7 @@ class No {
 
 No *raiz = NULL;
 
-/*
-void insere_arvore(No *novo, caracter_num novo_caracter){
-	
-	if(novo == NULL)
-		No *novo_no = new No(novo_caracter.c, novo_caracter.freq, NULL, NULL);
-	else{
-		if(){
-			
-		}
-	}
-}
-*/
-
 multimap <int, No*> pseudo_arvore;
-
-
-
-
 
 void gerar_nos(){
 	
@@ -142,8 +124,8 @@ void gerar_nos(){
 					
 				}
 			}
-			}
 		}
+	}
 		
 		else{
 			
@@ -164,7 +146,6 @@ void gerar_nos(){
 					
 					if(it->c != '|'){//o 1 eh no e o segundo nao eh no
 						direito = new No('|', it->freq, NULL, NULL);
-						
 					}else{//os dois sao nos
 						mult_it = pseudo_arvore.find(it->freq);
 						if(mult_it != pseudo_arvore.end()){//nao pode ter duas somas iguais
@@ -173,13 +154,9 @@ void gerar_nos(){
 					}
 					
 					aux += it->freq;
-					
-					No *Pai = new No('|', aux, esquerdo, direito);
-					
-					lista.erase(it);
-					
+					No *Pai = new No('|', aux, esquerdo, direito);					
+					lista.erase(it);				
 					insere('|', aux);
-					
 					pseudo_arvore.insert(pair<int, No*>(aux, Pai));
 				}
 			
@@ -242,7 +219,6 @@ int main(){
 	
 	*/
 	
-	
 	insere('f', 5);
 	insere('e', 9);
 	insere('c', 12);
@@ -250,25 +226,17 @@ int main(){
 	insere('d', 16);
 	insere('a', 45);
 	
-	
 	for(int i=0; i<lista.size(); i++){
 		cout<<lista[i].c<<" "<<lista[i].freq<<endl;
 	}
-	
 	gerar_nos();
-	
 	//multimap<int, No*>:: iterator iterador = pseudo_arvore.begin();
 	
-	
-	
 	multimap<int, No*>:: iterator it = pseudo_arvore.begin();
-	
 	
 	for(it; it!= pseudo_arvore.end(); it++){
 		cout<<it->first<<" : esquerda: "<<it->second->FE->chave.freq<<" : direita: "<<it->second->FD->chave.freq<<endl;
 	}
-	
-	
 	
    return 0;
 }
