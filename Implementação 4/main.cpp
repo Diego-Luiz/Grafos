@@ -68,24 +68,6 @@ multimap <int, No*> pseudo_arvore_copia;
 
 No *raiz = NULL;
 
-/*
-void insere_arvore(No *novo, caracter_num novo_caracter){
-	
-	if(novo == NULL)
-		No *novo_no = new No(novo_caracter.c, novo_caracter.freq, NULL, NULL);
-	else{
-		if(){
-			
-		}
-	}
-}
-*/
-
-
-
-
-
-
 
 void gerar_nos(){
 	
@@ -173,7 +155,7 @@ void gerar_nos(){
 					it = lista.begin();
 					
 					if(it->c != '|'){//o 1 eh no e o segundo nao eh no
-						direito = new No('|', it->freq, NULL, NULL);
+						direito = new No(it->c, it->freq, NULL, NULL);
 						
 					}else{//os dois sao nos
 						multimap<int, No*>::iterator mult_it = pseudo_arvore_copia.find(it->freq);
@@ -203,29 +185,38 @@ void gerar_nos(){
 }
 
 
-/*
-string criar_codigo(No *no, char caracter, string str, char direcao, bool achou){
-	if(No == NULL){
-		str = "";
+bool achou = false;
+
+string criar_codigo(No *no, char caracter, string str, char direcao){
+	
+	if(no == NULL){
 		return str;
 	}
 	else{
-		if(No.c == caracter){//achou
+		if(no->chave.c == caracter){//achou
 			achou = true;
-			return str + direcao;
+			return str + direcao;	
 		}
-		criar_codigo(No->FE);
-		criar_codigo(No->FD);
-		if(){
-			
+		str += criar_codigo(no->FE, caracter, str, '0');
+		if(achou)
+			return str + direcao;
+		else{
+			str += criar_codigo(no->FD, caracter, str, '1');
+			if(achou)
+				return str + direcao;
+			else
+				return str;
 		}
 	}
 }
-*/
+
 int main(){
-	/*
+	
     map<char,int> frequencia;
     map<char,int>::iterator itfreq;
+	map<char, string> tabeladecodigos; 
+	map<string, char> tabeladecodigos_invertida;
+	map<string, char>:: iterator ittabela;
     multimap<int,char> freq_ordenado;
     multimap<int,char>::iterator itord;
     FILE *arq;
@@ -246,6 +237,8 @@ int main(){
 			break;
     }while(true);
     
+	fclose(arq);
+	
     //MULTIMAP
     for(itfreq=frequencia.begin();itfreq!=frequencia.end();itfreq++){
         freq_ordenado.insert( pair<int,char>(itfreq->second,itfreq->first) );
@@ -257,7 +250,7 @@ int main(){
     }
 	
 	//criando arquivo para gravacao
-	arq = fopen("Frequencia.txt", "wt");
+	arq = fopen("FREQUENCIA.txt", "wt");
 	
 	for(itfreq=frequencia.begin();itfreq!=frequencia.end();itfreq++){
 		
@@ -269,45 +262,108 @@ int main(){
 		str += "-" + to_string(itfreq->second) + "\n";
 		
 		fputs(str.c_str(), arq);
-		
-		cout<<str<<endl;
 	}
 	
-	*/
+	fclose(arq);
 	
-	
-	insere('a', 7);
-	insere('b', 7);
-	insere('c', 7);
-	insere('d', 7);
-	insere('g', 7);
-	insere('f', 7);
-	
+	//---------
+	for(itfreq=frequencia.begin(); itfreq != frequencia.end(); itfreq++){//populando a lista
+		insere(itfreq->first, itfreq->second);
+	}
 	
 	for(int i=0; i<lista.size(); i++){
+		cout<<"lista"<<endl;
 		cout<<lista[i].c<<" "<<lista[i].freq<<endl;
 	}
 	
 	gerar_nos();
-	
-	//multimap<int, No*>:: iterator iterador = pseudo_arvore.begin();
-	
-	
+		
 	
 	multimap<int, No*>:: iterator it = pseudo_arvore.begin();
 	
 	
 	for(it; it!= pseudo_arvore.end(); it++){
-		cout<<it->first<<" : esquerda: "<<it->second->FE->chave.c<<" : direita: "<<it->second->FD->chave.c<<endl;
-		
+		cout<<it->first<<" : esquerda: "<<it->second->FE->chave.c<<", "<<it->second->FE->chave.freq<<" : direita: "<<it->second->FD->chave.c<<", "<<it->second->FD->chave.freq<<endl;
 	}
 	
 	
-	it = pseudo_arvore.find(42);
+	it = pseudo_arvore.end();//definindo a raiz da arvore
+	it--;
+	raiz = it->second;
 	
 	
-	cout<<it->second->FD->FE->FE->chave.c<<endl;
+	arq = fopen("TABELADECODIGOS.txt", "wt");
+	for(itfreq=frequencia.begin(); itfreq != frequencia.end(); itfreq++){
+		
+		string codigo = criar_codigo(raiz, itfreq->first, "", 'n');
+		codigo = codigo.erase(codigo.size()-1);//tirando o n do final da string
+		cout<<codigo<<endl;
+		string invertida="";
+		
+		for(string::reverse_iterator rit=codigo.rbegin(); rit!=codigo.rend(); ++rit){
+			invertida += *rit;
+		}
+		
+		codigo = itfreq->first;
+		codigo +=  "-";
+		codigo += invertida;
+		codigo += "\n";
+		
+		fputs(codigo.c_str(), arq);
+		
+		achou = false;
+		
+		tabeladecodigos[itfreq->first] = invertida;//guardando representacao do codigo dos caracterem em um mapa
+		tabeladecodigos_invertida[invertida] = itfreq->first; //guardando a tabeladecodigos invertida
+	}
 	
+	fclose(arq);
+	
+	//CODIFICANDO O ARQUIVO
+	arq = fopen("Arq.txt", "rt");
+	
+	FILE *novo_arq = fopen("CODIFICADO.txt", "wt");
+	
+	do{
+        c = fgetc(arq);
+        
+		if(c != EOF)
+			fputs(tabeladecodigos[c].c_str(), novo_arq);
+		else
+			break;
+    }while(true);
+	
+	fclose(arq);
+	fclose(novo_arq);
+	
+	//DECODIFICANDO O ARQUIVO
+	
+	arq = fopen("CODIFICADO.txt", "rt");
+	FILE *decodificado = fopen("DECODIFICADO.txt", "wt");
+	
+
+	string deco="";
+	cout<<"antes do while"<<endl;
+	do{
+        c = fgetc(arq);
+		
+        deco += c;
+		cout<<"deco: "<<deco<<endl;
+		if(c != EOF){
+			
+			ittabela = tabeladecodigos_invertida.find(deco);
+			
+			if(ittabela != tabeladecodigos_invertida.end()){
+				cout<<ittabela->second<<endl;
+				fputc(ittabela->second, decodificado);
+				deco = "";
+			}
+		}
+		else
+			break;
+    }while(true);
+	
+	fclose(decodificado);
 	
    return 0;
 }
