@@ -338,31 +338,5 @@ int main(){
 	fclose(arq);
 	fclose(novo_arq);
 	
-	//DECODIFICANDO O ARQUIVO
-	
-	arq = fopen("CODIFICADO.txt", "rt");
-	FILE *decodificado = fopen("DECODIFICADO.txt", "wt");
-	
-
-	string deco="";
-	do{
-        c = fgetc(arq);
-		
-        deco += c;
-		if(c != EOF){
-			
-			ittabela = tabeladecodigos_invertida.find(deco);
-			
-			if(ittabela != tabeladecodigos_invertida.end()){
-				fputc(ittabela->second, decodificado);
-				deco = "";
-			}
-		}
-		else
-			break;
-    }while(true);
-	
-	fclose(decodificado);
-	
    return 0;
 }
