@@ -6,7 +6,7 @@
 #include <map>
 #include <set>
 #include <utility>
-
+// Ao executar o código leia o arquivo "Leia-me", com as instruções de entrada do algorítimo. 
 using namespace std;
 
 vector<string> IN; //conjunto IN de vértices
