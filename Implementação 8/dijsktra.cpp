@@ -61,17 +61,17 @@ void dijkstra(vector< vector<Aresta> >& grafo, int ini, int fim)
 
         }
     }
-    
-   
-    cout<<endl<<ini<<"-"; 
-    for(int i =0; i< s.size();i++){
-        if(s[i]!=ini && s[i]!=fim)
-            cout<<s[i]<<"-";
+ 
+    vector<int> aux;
+    vector<int>::reverse_iterator rit;
+    for(int i=fim;s[i]!=ini && i>=0;i--){
+        aux.push_back(s[i]);
     }
+    cout<<endl<<ini<<"-";
+    for(rit= aux.rbegin(); rit!=aux.rend();rit++)
+        cout<<*rit<<"-";
     cout<<fim<<endl;
     
-   
-
 }
 
 int main()
@@ -90,18 +90,17 @@ int main()
         cin>>x>>y>>peso;
         cout<<endl;
         
-        // Aresta ar(peso, y-1);
-        // grafo[x-1].push_back(ar);
         Aresta ar(peso, y);
+        Aresta ar2(peso, x);
         grafo[x].push_back(ar);
+        grafo[y].push_back(ar2);
     }
-
+    
     cout<<"Digite a quantidade de consultas desejadas: ";
     cin>>consultas; /* Consulta de caminho minimo */
     cout<<endl;
     for(int i = 0; i < consultas; i++){
       cin>>ini>>fim;
-    //   cout<<"Distancia entre "<<ini<<" e "<<fim<<" : "<<dijkstra(grafo, ini-1, fim-1)<<endl;
       cout<<"Caminho entre "<<ini<<" e "<<fim<<" : ";
       dijkstra(grafo, ini, fim);
       cout<<endl;
